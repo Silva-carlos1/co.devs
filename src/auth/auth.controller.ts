@@ -7,12 +7,14 @@ import {
   HttpStatus,
   Request,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { CredentialsLoginDto } from './dto/login-credentials.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -38,5 +40,11 @@ export class AuthController {
     @Request() req,
   ) {
     return await this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/')
+  async test() {
+    return;
   }
 }
